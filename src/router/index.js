@@ -16,6 +16,6 @@ const routes = [
 ];
 
 export default createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/currency-exchange-calculator/'),
   routes,
 });

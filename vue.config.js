@@ -11,6 +11,6 @@ module.exports = {
     },
   },
   publicPath: process.env.NODE_ENV === 'production'
-  ? '/currency-exchange-calculator/'
+  ? '/privat-currency/'
   : '/'
 }

@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/views/Home.vue";
-import About from "@/views/Result.vue";
+import Result from "@/views/Result.vue";
 
 const routes = [
   {
@@ -11,11 +11,11 @@ const routes = [
   {
     path: "/result",
     name: "Result",
-    component: About,
+    component: Result,
   },
 ];
 
 export default createRouter({
-  history: createWebHistory('/currency-exchange-calculator/'),
+  history: createWebHistory(),
   routes,
 });

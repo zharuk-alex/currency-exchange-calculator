@@ -1,11 +1,14 @@
 <template>
   <card>
     <h1>{{ text.title }}</h1>
-    <h2 v-if="noData">{{ text.noData }}</h2>
-    <div v-else>
-      <h4 class="text-secondary">{{ subtitle }}</h4>
-      <table class="table">
+    <div class="tableFixHead table-responsive">
+      <table class="table table-sm">
         <thead>
+          <tr>
+            <th :colspan="t_heads.length" width="100%">
+              <h4 class="text-secondary">{{ subtitle }}</h4>
+            </th>
+          </tr>
           <tr>
             <th v-for="(th, index) in t_heads" :key="index" scope="col">
               {{ th }}
@@ -13,12 +16,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(cell, index) in t_rows" :key="index">
-            <td>{{ cell }}</td>
-            <td>{{ resultData[cell] }}</td>
-            <td>{{ sumValueNums(resultData[cell]) }}</td>
-            <td>{{ isEven(resultData[cell]) }}</td>
-          </tr>
+          <template v-for="(currency, index) in resultData" :key="index">
+            <tr v-if="currency.currency">
+              <td>{{ currency.currency }}</td>
+              <td>{{ currency.saleRateNB }}</td>
+              <td>{{ currency.purchaseRateNB }}</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
@@ -32,34 +36,47 @@
 <script>
 import locale from "@/locale/ua.json";
 import Card from "@/components/Card.vue";
+import { mapGetters } from "vuex";
+
 export default {
   components: {
     Card,
   },
   data: () => ({
-    t_heads: ["Prop Name", "Value", "Sum", "isEven"],
-    t_rows: ["saleRateNB", "purchaseRateNB", "saleRate", "purchaseRate"],
+    t_heads: ["Валюта", "saleRateNB", "purchaseRateNB"],
   }),
   computed: {
-    noData() {
-      return this.$store.getters.getExchangeRate == null;
-    },
+    ...mapGetters({
+      resultData: "getExchangeRate",
+      subtitle: "getExchangeDate",
+    }),
     text: () => locale.result,
-    resultData() {
-      return this.$store.getters.getExchangeRate;
-    },
-    subtitle() {
-      return this.$store.getters.getReqParams.date;
-    },
-  },
-  methods: {
-    isEven(val) {
-      return this.sumValueNums(val) % 2 == 0;
-    },
-    sumValueNums(val) {
-      let nums = Array.from(("" + val).replace(/\D/g, ""));
-      return nums.reduce((a, b) => +a + +b, 0);
-    },
   },
 };
 </script>
+
+<style scoped>
+.card-body {
+  max-height: calc(100vh - 40px);
+}
+.tableFixHead {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.tableFixHead table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableFixHead th,
+.tableFixHead td {
+  padding: 8px 16px;
+}
+
+.tableFixHead th {
+  position: sticky;
+  top: 0;
+  background: #eee;
+}
+</style>

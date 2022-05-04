@@ -6,13 +6,10 @@
   </div>
 </template>
 
-<script>
-export default {};
-</script>
-
 <style>
 .card {
   width: 600px;
+  max-width: calc(100% - 10px);
   border: 1px solid grey;
   background-color: #f1f1f1 !important;
   text-align: center;

@@ -1,6 +1,6 @@
 <template>
   <card>
-    <h1>{{ text.title }}</h1>
+    <h1 class="mb-4">{{ text.title }}</h1>
     <button @click="showModal = true" type="button" class="btn btn-primary">
       {{ text.select_date }}
     </button>

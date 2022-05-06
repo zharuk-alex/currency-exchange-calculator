@@ -2,7 +2,7 @@
   <card>
     <h1>{{ text.title }}</h1>
     <h4 class="text-secondary">{{ subtitle }}</h4>
-    <div class="tableFixHead table-responsive">
+    <div v-if="resultData.length" class="tableFixHead table-responsive">
       <table class="table table-sm">
         <thead>
           <tr>
@@ -33,7 +33,9 @@
         </tbody>
       </table>
     </div>
-
+    <div v-else>
+      <BaseAlert :visible="true" type="danger" :alertText="text.noData" />
+    </div>
     <button class="btn btn-secondary mt-2" @click="$router.push('/')">
       {{ text.back }}
     </button>
@@ -44,12 +46,14 @@
 import locale from "@/locale/ua.json";
 import Card from "@/components/Card.vue";
 import BaseSortButton from "@/components/BaseSortButton.vue";
+import BaseAlert from "@/components/BaseAlert.vue";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     Card,
     BaseSortButton,
+    BaseAlert,
   },
   data: () => ({
     t_heads: [

@@ -51,6 +51,8 @@
     v-if="error"
     v-model:visible="showError"
     type="danger"
+    :fixed="true"
+    :clearable="true"
     :alertText="error"
   />
 </template>

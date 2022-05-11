@@ -3,6 +3,23 @@
     <div class="card-body">
       <slot></slot>
     </div>
+    <div class="card-footer d-flex justify-content-between">
+      <span class="mx-2">
+        <a
+          href="https://api.privatbank.ua/#p24/exchangeArchive"
+          target="_blank"
+        >
+          api.privatbank.ua
+        </a>
+      </span>
+
+      <span class="mx-2">zharuk alex @ 2022</span>
+      <span class="mx-2">
+        <a href="https://zzharuk.github.io/" target="_blank">
+          zzharuk.github.io
+        </a>
+      </span>
+    </div>
   </div>
 </template>
 

@@ -2,41 +2,54 @@
   <card>
     <h1>{{ text.title }}</h1>
     <h4 class="text-secondary">{{ subtitle }}</h4>
-    <div v-if="resultData.length" class="tableFixHead table-responsive">
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th
-              v-for="({ field, text }, index) in t_heads"
-              :key="index"
-              scope="col"
-              :class="{ active: sort.field == field }"
-            >
-              {{ text }}
-              <BaseSortButton
-                @toggle="toggleSort(field, $event)"
-                :active="sort.field == field"
-              />
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="(currency, index) in sortedRows" :key="index">
-            <tr v-if="currency.currency">
-              <td>{{ currency.currency }}</td>
-              <td>{{ currency.saleRate }}</td>
-              <td>{{ currency.purchaseRate }}</td>
-              <td>{{ currency.saleRateNB }}</td>
-              <td>{{ currency.purchaseRateNB }}</td>
+    <div v-if="resultData.length">
+      <ExchangeSection />
+      <hr />
+      <div class="tableFixHead table-responsive">
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th
+                v-for="({ field, text }, index) in t_heads"
+                :key="index"
+                scope="col"
+                :class="{ active: sort.field == field }"
+              >
+                {{ text }}
+                <BaseSortButton
+                  @toggle="toggleSort(field, $event)"
+                  :active="sort.field == field"
+                />
+              </th>
             </tr>
-          </template>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <template v-for="(currency, index) in sortedRows" :key="index">
+              <tr
+                v-if="currency.currency"
+                @click="selectRow(currency)"
+                :class="{
+                  'table-active':
+                    currency.currency == selectedCurrency.currency,
+                }"
+              >
+                <td>{{ currency.currency }}</td>
+                <td>{{ currency.saleRate }}</td>
+                <td>{{ currency.purchaseRate }}</td>
+                <td>{{ currency.saleRateNB }}</td>
+                <td>{{ currency.purchaseRateNB }}</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div v-else>
-      <BaseAlert :visible="true" type="danger" :alertText="text.noData" />
-    </div>
-    <button class="btn btn-secondary mt-2" @click="$router.push('/')">
+    <BaseAlert v-else :visible="true" type="danger" :alertText="text.noData" />
+
+    <button
+      class="btn btn-secondary mt-2"
+      @click="$router.push({ name: 'home' })"
+    >
       {{ text.back }}
     </button>
   </card>
@@ -44,16 +57,16 @@
 
 <script>
 import locale from "@/locale/ua.json";
+import moment from "moment";
 import Card from "@/components/Card.vue";
-import BaseSortButton from "@/components/BaseSortButton.vue";
-import BaseAlert from "@/components/BaseAlert.vue";
-import { mapGetters } from "vuex";
+import ExchangeSection from "@/components/ExchangeSection.vue";
+
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
     Card,
-    BaseSortButton,
-    BaseAlert,
+    ExchangeSection,
   },
   data: () => ({
     t_heads: [
@@ -85,8 +98,9 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      resultData: "getExchangeRate",
-      subtitle: "getExchangeDate",
+      resultData: "exchangeRate",
+      subtitle: "exchangeDate",
+      selectedCurrency: "selectedCurrency",
     }),
     text: () => locale.result,
     sortedRows() {
@@ -108,9 +122,24 @@ export default {
     },
   },
   methods: {
+    ...mapActions({ fetchExchangeRate: "fetchExchangeRate" }),
     toggleSort(field, order) {
       this.sort = { field, order };
     },
+    selectRow(rowdata) {
+      this.$store.commit("SET_SELECTED_CURRENCY", rowdata);
+    },
+  },
+  created() {
+    const date = this.$route.query?.date || moment().format("DD.MM.YYYY");
+    this.fetchExchangeRate(date).catch((error) => {
+      this.error = error.response?.statusText
+        ? error.response.statusText
+        : "error";
+      setTimeout(() => {
+        this.error = false;
+      }, 4000);
+    });
   },
 };
 </script>
@@ -119,12 +148,10 @@ export default {
 .card {
   width: 760px;
 }
-.card-body {
-  max-height: calc(100vh - 40px);
-}
+
 .tableFixHead {
   overflow-y: auto;
-  max-height: 400px;
+  max-height: calc(100vh - 300px);
 }
 
 .tableFixHead table {
@@ -145,5 +172,9 @@ export default {
 }
 .tableFixHead th.active {
   color: #6f7378;
+}
+
+.tableFixHead tbody tr:hover {
+  cursor: pointer;
 }
 </style>

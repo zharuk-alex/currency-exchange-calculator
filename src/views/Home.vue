@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
 import useVuelidate from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators/dist/raw.esm";
 import moment from "moment";
@@ -67,7 +66,6 @@ import locale from "@/locale/ua.json";
 import Modal from "@/components/Modal.vue";
 import Card from "@/components/Card.vue";
 import FormCustom from "@/components/FormCustom.vue";
-import BaseAlert from "@/components/BaseAlert.vue";
 
 export default {
   setup() {
@@ -79,11 +77,10 @@ export default {
     Modal,
     Card,
     FormCustom,
-    BaseAlert,
   },
   data: () => ({
     showModal: false,
-    dateSelected: null,
+    dateSelected: moment().format("YYYY-MM-DD"),
     maxDate: moment().format("YYYY-MM-DD"),
     minDate: moment().add(-2, "years").format("YYYY-MM-DD"),
     isFetch: false,
@@ -115,31 +112,17 @@ export default {
   },
 
   methods: {
-    ...mapMutations({ saveRequestParams: "SET_REQ_PARAMS" }),
-    ...mapActions({ fetchExchangeRate: "fetchExchangeRate" }),
     async submitForm() {
       const isFormCorrect = await this.v$.$validate();
       if (!isFormCorrect) return;
       this.isFetch = true;
-
       this.showModal = false;
-
       let date = moment(this.dateSelected, "YYYY-MM-DD").format("DD.MM.YYYY");
-      this.fetchExchangeRate(date)
-        .then((r) => {
-          r ? setTimeout(() => this.$router.push("result"), 500) : false;
-        })
-        .catch((error) => {
-          this.error = error.response?.statusText
-            ? error.response.statusText
-            : "error";
-          setTimeout(() => {
-            this.error = false;
-          }, 4000);
-        })
-        .finally(() => {
-          this.isFetch = false;
-        });
+
+      setTimeout(
+        () => this.$router.push({ name: "result", query: { date } }),
+        500
+      );
     },
   },
 };

@@ -10,24 +10,29 @@ const GLOBAL_URL = function(){
 
 export default createStore({
   state: {
-    exchangeRate: {},
+    exchangeRate: [],
     date: null,
-    req_params: {}
+    selectedCurrency: {}
   },
   getters: {
-    getExchangeRate: (state) => state.exchangeRate,
-    getExchangeDate: (state) => state.date,
+    exchangeRate: (state) => state.exchangeRate,
+    exchangeDate: (state) => state.date,
+    currienciesList: (state) => state.exchangeRate.filter(currency=> +currency.purchaseRate ? currency.currency : false),
+    selectedCurrency: (state) => state.selectedCurrency,
   },
   mutations: {
     SET_RESPONSE_DATA(state, response) {
-      state.exchangeRate = response.exchangeRate;
+      state.exchangeRate = response.exchangeRate.filter(currency=>currency?.saleRate);
       state.date = response.date;
+      state.selectedCurrency = state.exchangeRate.find(currency => currency.currency.toLowerCase() == "usd") || state.exchangeRate[0]
+    },
+    SET_SELECTED_CURRENCY(state, currency){
+      state.selectedCurrency = currency
     }
   },
   actions: {
     async fetchExchangeRate({ commit }, date) {
-      let url = GLOBAL_URL();
-          
+      let url = GLOBAL_URL();  
       return await axios.get(url, {
           params:{
             "json" : true,

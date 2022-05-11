@@ -12,13 +12,18 @@ export default createStore({
   state: {
     exchangeRate: [],
     date: null,
-    selectedCurrency: {}
+    selectedCurrency: {},
+    exchangeType: [
+      {text: "purchase", value: "purchaseRate"},
+      {text: "sale", value: "saleRate"}
+    ]
   },
   getters: {
     exchangeRate: (state) => state.exchangeRate,
     exchangeDate: (state) => state.date,
     currienciesList: (state) => state.exchangeRate.filter(currency=> +currency.purchaseRate ? currency.currency : false),
     selectedCurrency: (state) => state.selectedCurrency,
+    exchangeType: (state) => state.exchangeType,
   },
   mutations: {
     SET_RESPONSE_DATA(state, response) {

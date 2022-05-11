@@ -1,7 +1,7 @@
 <template>
   <section v-if="selectedCurrency" class="py-3">
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-sm">
         <div class="input-group mb-3">
           <input
             type="text"
@@ -9,11 +9,7 @@
             aria-label="Amount (to the nearest dollar)"
             v-model="currencyAmount"
           />
-          <select
-            class="input-group-text"
-            @change="changeCurrency($event)"
-            v-model="selectedCurrency"
-          >
+          <select class="input-group-text" v-model="selectedCurrency">
             <option
               v-for="({ currency }, index) in currienciesList"
               :value="currency"
@@ -24,7 +20,7 @@
           </select>
         </div>
       </div>
-      <div class="col">
+      <div class="col-12 col-sm">
         <div class="input-group mb-3">
           <input
             type="text"
@@ -32,7 +28,16 @@
             disabled
             :value="uahRate"
           />
-          <span class="input-group-text">₴ Uah</span>
+          <span class="input-group-text">₴ UAH</span>
+          <select class="form-select" v-model="selectedType">
+            <option
+              v-for="(type, index) in exchangeType"
+              :value="type.value"
+              :key="index"
+            >
+              {{ type.text }}
+            </option>
+          </select>
         </div>
       </div>
     </div>
@@ -40,14 +45,7 @@
 </template>
 
 <script>
-import {
-  ref,
-  reactive,
-  computed,
-  onMounted,
-  toRefs,
-  defineComponent,
-} from "vue";
+import { ref, computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
@@ -60,6 +58,11 @@ export default defineComponent({
     const store = useStore();
 
     const isDataExist = computed(() => store?.getters?.currienciesList?.length);
+
+    const exchangeType = store.getters.exchangeType;
+    const currencyAmount = ref(1);
+
+    const selectedType = ref(exchangeType[0].value);
 
     const currienciesList = computed(() =>
       store?.getters?.currienciesList.length
@@ -81,12 +84,11 @@ export default defineComponent({
       },
     });
 
-    const currencyAmount = ref(1);
+    const uahRate = computed(() => {
+      let rate = selectedType.value;
+      return +store?.getters?.selectedCurrency[rate] * currencyAmount.value;
+    });
 
-    const uahRate = computed(
-      () =>
-        +store?.getters?.selectedCurrency?.purchaseRate * currencyAmount.value
-    );
     return {
       selectedCurrency,
       currienciesList,
@@ -94,12 +96,17 @@ export default defineComponent({
       uahRate,
       store,
       isDataExist,
+      selectedType,
+      exchangeType,
     };
-  },
-  methods: {
-    changeCurrency(value) {
-      console.log("currency change", value);
-    },
   },
 });
 </script>
+<style scoped>
+section {
+  border-bottom: 1px solid #e5e5e5;
+}
+.input-group-text {
+  width: 80px;
+}
+</style>

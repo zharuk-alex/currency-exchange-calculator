@@ -1,6 +1,5 @@
 <template>
   <form
-    action=""
     class="row g-3 needs-validation"
     :class="{ 'was-validated': validated }"
     novalidate

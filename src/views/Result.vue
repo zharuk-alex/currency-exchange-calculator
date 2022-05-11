@@ -1,49 +1,53 @@
 <template>
   <card>
-    <h1>{{ text.title }}</h1>
-    <h4 class="text-secondary">{{ subtitle }}</h4>
-    <div v-if="resultData.length">
+    <div class="result-header">
+      <h1>{{ text.title }}</h1>
+      <h4 class="text-secondary">{{ subtitle }}</h4>
       <ExchangeSection />
-      <hr />
-      <div class="tableFixHead table-responsive">
-        <table class="table table-sm table-hover">
-          <thead>
-            <tr>
-              <th
-                v-for="({ field, text }, index) in t_heads"
-                :key="index"
-                scope="col"
-                :class="{ active: sort.field == field }"
-              >
-                {{ text }}
-                <BaseSortButton
-                  @toggle="toggleSort(field, $event)"
-                  :active="sort.field == field"
-                />
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-for="(currency, index) in sortedRows" :key="index">
-              <tr
-                v-if="currency.currency"
-                @click="selectRow(currency)"
-                :class="{
-                  'table-active':
-                    currency.currency == selectedCurrency.currency,
-                }"
-              >
-                <td>{{ currency.currency }}</td>
-                <td>{{ currency.saleRate }}</td>
-                <td>{{ currency.purchaseRate }}</td>
-                <td>{{ currency.saleRateNB }}</td>
-                <td>{{ currency.purchaseRateNB }}</td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
     </div>
+
+    <div
+      v-if="resultData.length"
+      style="flex: 1"
+      class="tableFixHead table-responsive"
+    >
+      <table class="table table-sm table-hover">
+        <thead>
+          <tr>
+            <th
+              v-for="({ field, text }, index) in t_heads"
+              :key="index"
+              scope="col"
+              :class="{ active: sort.field == field }"
+            >
+              {{ text }}
+              <BaseSortButton
+                @toggle="toggleSort(field, $event)"
+                :active="sort.field == field"
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="(currency, index) in sortedRows" :key="index">
+            <tr
+              v-if="currency.currency"
+              @click="selectRow(currency)"
+              :class="{
+                'table-active': currency.currency == selectedCurrency.currency,
+              }"
+            >
+              <td>{{ currency.currency }}</td>
+              <td>{{ currency.saleRate }}</td>
+              <td>{{ currency.purchaseRate }}</td>
+              <td>{{ currency.saleRateNB }}</td>
+              <td>{{ currency.purchaseRateNB }}</td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+
     <BaseAlert v-else :visible="true" type="danger" :alertText="text.noData" />
 
     <button
@@ -145,13 +149,9 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  width: 760px;
-}
-
 .tableFixHead {
   overflow-y: auto;
-  max-height: calc(100vh - 300px);
+  /* max-height: calc(100vh - 350px); */
 }
 
 .tableFixHead table {

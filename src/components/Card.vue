@@ -3,32 +3,42 @@
     <div class="card-body">
       <slot></slot>
     </div>
-    <div class="card-footer d-flex justify-content-between">
-      <span class="mx-2">
-        <a
-          href="https://api.privatbank.ua/#p24/exchangeArchive"
-          target="_blank"
-        >
-          api.privatbank.ua
-        </a>
-      </span>
+    <div class="card-footer">
+      <div class="row justify-content-between flex-wrap">
+        <div class="col-12 col-sm">
+          <a
+            href="https://api.privatbank.ua/#p24/exchangeArchive"
+            target="_blank"
+          >
+            api.privatbank.ua
+          </a>
+        </div>
 
-      <span class="mx-2">zharuk alex @ 2022</span>
-      <span class="mx-2">
-        <a href="https://zzharuk.github.io/" target="_blank">
-          zzharuk.github.io
-        </a>
-      </span>
+        <div class="col-12 col-sm">zharuk alex @ 2022</div>
+        <div class="col-12 col-sm">
+          <a href="https://zzharuk.github.io/" target="_blank">
+            zzharuk.github.io
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style>
 .card {
-  width: 600px;
-  max-width: calc(100% - 10px);
+  width: 760px;
+  max-width: 100%;
   border: 1px solid grey;
   background-color: #f1f1f1 !important;
   text-align: center;
+  max-height: 100vh;
+  max-height: calc(var(--vh, 1vh) * 100 - 20px);
+  height: fit-content;
+  margin: 10px auto;
+  display: flex;
+}
+.card-footer {
+  font-size: 13px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="container-fluid">
     <router-view></router-view>
   </div>
 </template>
@@ -7,26 +7,25 @@
 <script>
 export default {
   name: "App",
+  mounted() {
+    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+
+    // We listen to the resize event
+    window.addEventListener("resize", () => {
+      // We execute the same script as before
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    });
+  },
 };
 </script>
-
 <style>
-html,
-body,
-#app {
-  height: 100%;
-}
-body {
-  margin: 10px;
-  overflow: hidden;
-}
-.page-container {
-  height: 100%;
-  padding: 0;
-  margin: 15px;
+.container-fluid {
+  height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
 </style>

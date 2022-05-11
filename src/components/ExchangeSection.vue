@@ -4,9 +4,12 @@
       <div class="col-12 col-sm">
         <div class="input-group mb-3">
           <input
-            type="text"
+            inputmode="numeric"
+            type="number"
+            pattern="[0-9]+([\.,][0-9]+)?"
+            step="0.01"
             class="form-control"
-            aria-label="Amount (to the nearest dollar)"
+            aria-label="Amount"
             v-model="currencyAmount"
           />
           <select class="input-group-text" v-model="selectedCurrency">
@@ -86,7 +89,9 @@ export default defineComponent({
 
     const uahRate = computed(() => {
       let rate = selectedType.value;
-      return +store?.getters?.selectedCurrency[rate] * currencyAmount.value;
+      return (
+        +store?.getters?.selectedCurrency[rate] * currencyAmount.value
+      ).toFixed(2);
     });
 
     return {

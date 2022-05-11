@@ -47,9 +47,7 @@
         </tbody>
       </table>
     </div>
-
     <BaseAlert v-else :visible="true" type="danger" :alertText="text.noData" />
-
     <button
       class="btn btn-secondary mt-2"
       @click="$router.push({ name: 'home' })"

@@ -16,9 +16,7 @@
 
         <div class="col-12 col-sm">zharuk alex @ 2022</div>
         <div class="col-12 col-sm">
-          <a href="https://zzharuk.github.io/" target="_blank">
-            zzharuk.github.io
-          </a>
+          <a href="https://zharuk-alex.github.io/" target="_blank"> github </a>
         </div>
       </div>
     </div>
@@ -26,19 +24,19 @@
 </template>
 
 <style>
-.card {
-  width: 760px;
-  max-width: 100%;
-  border: 1px solid grey;
-  background-color: #f1f1f1 !important;
-  text-align: center;
-  max-height: 100vh;
-  max-height: calc(var(--vh, 1vh) * 100 - 20px);
-  height: fit-content;
-  margin: 10px auto;
-  display: flex;
-}
-.card-footer {
-  font-size: 13px;
-}
+  .card {
+    width: 760px;
+    max-width: 100%;
+    border: 1px solid grey;
+    background-color: #f1f1f1 !important;
+    text-align: center;
+    max-height: 100vh;
+    max-height: calc(var(--vh, 1vh) * 100 - 20px);
+    height: fit-content;
+    margin: 10px auto;
+    display: flex;
+  }
+  .card-footer {
+    font-size: 13px;
+  }
 </style>

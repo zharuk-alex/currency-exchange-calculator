@@ -11,6 +11,6 @@ git init
 git add .
 git commit -m 'deploy'
 
-git push -f https://github.com/zzharuk/currency-exchange-calculator.git master:gh-pages
+git push -f https://github.com/zharuk-alex/currency-exchange-calculator.git master:gh-pages
 
 cd -

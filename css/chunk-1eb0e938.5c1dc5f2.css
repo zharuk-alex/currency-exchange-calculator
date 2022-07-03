@@ -1,0 +1,1 @@
+.card{width:760px;max-width:100%;border:1px solid grey;background-color:#f1f1f1!important;text-align:center;max-height:100vh;max-height:calc(var(--vh, 1vh)*100 - 20px);height:-webkit-fit-content;height:-moz-fit-content;height:fit-content;margin:10px auto;display:flex}.card-footer{font-size:13px}
